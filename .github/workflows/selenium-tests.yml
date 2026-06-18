@@ -9,7 +9,7 @@ on:
     branches:
       - main
 
-  workflow_dispatch:
+
 
 jobs:
   run-tests:
@@ -33,7 +33,7 @@ jobs:
         run: mvn -version
 
       - name: Clean and Run Tests
-        run: mvn clean test
+        run: mvn clean test -Dheadless=true
 
       - name: Upload Cucumber Reports
         if: always()

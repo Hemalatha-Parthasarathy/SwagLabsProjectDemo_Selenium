@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class DriverFactory {
     private static ThreadLocal<WebDriver> ldriver = new ThreadLocal<>();
 
     //Method to initialise the desired driver
-    public  WebDriver init_driver(String browser){
+    public  WebDriver init_driver(String browser,boolean headless){
 
         if(browser.equals("chrome")){
 
@@ -31,6 +32,11 @@ public class DriverFactory {
 
             options = new ChromeOptions();
             options.setExperimentalOption("prefs",prefs);
+            if(headless){
+                options.addArguments("--headless=new");
+            }
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
 
             WebDriverManager.chromedriver().setup();
             ldriver.set(new ChromeDriver(options));
@@ -38,7 +44,9 @@ public class DriverFactory {
         else if(browser.equals("firefox"))
         {
             WebDriverManager.firefoxdriver().setup();
-            ldriver.set(new FirefoxDriver());
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("-headless");
+            ldriver.set(new FirefoxDriver(options));
         }
         else {
             System.out.println("Provide the right browser: "+browser);

@@ -28,13 +28,16 @@ public class Hooks {
     @Before(order = 1)
     public void launchBrowser(){
         String browserName = prop.getProperty("browser");
+        boolean headless = Boolean.parseBoolean(prop.getProperty("headless"));
         driverFactory = new DriverFactory();
-        driver = driverFactory.init_driver(browserName);
+        driver = driverFactory.init_driver(browserName,headless);
     }
 
     @After(order = 0)
     public void closeBrowser(){
-       driver.close();
+        if(driver != null){
+            driver.quit();
+        }
 
     }
 
