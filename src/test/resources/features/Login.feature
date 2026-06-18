@@ -51,7 +51,7 @@ Feature: Login functionality
     Given User is on the Login page
     When User enters Password as "<Password>"
     And Click on login button
-    Then Validate the error message for empty password
+    Then Validate the error message for empty username
     Examples:
       | Password     |
       | secret_sauce |
