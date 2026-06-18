@@ -28,6 +28,11 @@ public class LoginPageSteps {
         loginpage.setUsername(username);
     }
 
+    @When("User enters Password as {string}")
+    public void user_enters_password_as(String password){
+        loginpage.setPassword(password);
+    }
+
     @And("Click on login button")
     public void click_on_login_button() throws InterruptedException {
         loginpage.clickOnlogin();

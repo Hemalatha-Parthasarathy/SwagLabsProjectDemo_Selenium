@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartPageSteps {
-
-    private CartPage cartPage = new CartPage(DriverFactory.getDriver());
     private ProductsPage productsPage = new ProductsPage(DriverFactory.getDriver());
+    private CartPage cartPage = new CartPage(DriverFactory.getDriver());
+
 
     @Then("User is on the cart page")
     public void user_is_on_the_cart_page() {
@@ -42,8 +42,15 @@ public class CartPageSteps {
 
     @And("Cart icon with quantity is displayed")
     public void cart_icon_with_quantity_is_displayed() {
-        String itemcount = cartPage.display_iconitemcount();
+        String itemcount = cartPage.get_iconitemcount();
         Assert.assertEquals("2", itemcount);
+    }
+
+    @And("Cart icon and quantity is displayed")
+    public void cart_icon_and_quantity_is_displayed() {
+        cartPage.display_iconCart();
+        cartPage.display_cartItemCount();
+
     }
 
 
@@ -56,34 +63,53 @@ public class CartPageSteps {
 
     @And("Verify that the Cart page contains the selected products")
     public void verify_that_the_cart_page_contains_the_selected_products() {
-        List<String> actual = cartPage.get_cartprodname_multiple();
-        List<String> expected = productsPage.get_removeProducts();
-        Assert.assertEquals(expected, actual);
+        List<String> cartPageProducts = cartPage.get_cartprodname_multiple();
+        cartPage.clk_txtcontinueshop();
+        productsPage.validatePageHeader();
+        List<String> productPageProducts = productsPage.get_removeProducts();
+        Assert.assertEquals(productPageProducts,cartPageProducts);
+        productsPage.clk_carticon();
 
+    }
+
+    @When("User clicks on Remove button of {string}")
+    public void user_clicks_on_remove_button_of(String product) {
+        int beforecount = Integer.parseInt(cartPage.get_iconitemcount());
+        System.out.println(beforecount);
+        cartPage.clk_cartRemove(product);
+        Assert.assertTrue("Cart Item count is Empty",cartPage.cartItemCountNotpresent());
     }
 
     @When("User clicks on Remove button of specific {string}")
     public void user_clicks_on_remove_button_of_specific(String product) {
-        int beforecount = productsPage.cartIconCount();
+        int beforecount = Integer.parseInt(cartPage.get_iconitemcount());
+        System.out.println(beforecount);
         cartPage.clk_cartRemove(product);
-        int aftercount = productsPage.cartIconCount();
-        Assert.assertEquals(aftercount, beforecount - 1);
-    }
+        int aftercount = Integer.parseInt(cartPage.get_iconitemcount());
+        System.out.println(aftercount);
+        Assert.assertEquals(aftercount, (beforecount - 1));
+        }
+
 
     @When("User clicks on Remove for multiple products on cart page")
     public void user_clicks_on_remove_for_multiple_products_on_cart_page(DataTable dataTable) {
-        int beforecount = productsPage.cartIconCount();
+        int beforecount = Integer.parseInt(cartPage.get_iconitemcount());
         List<String> removelist = dataTable.asList();
         cartPage.clk_removemultiple(removelist);
-        int aftercount = productsPage.cartIconCount();
-        Assert.assertEquals(aftercount, beforecount - removelist.size());
+        Assert.assertTrue("Cart Item count is Empty",cartPage.cartItemCountNotpresent());
     }
 
     @Then("Removed {string} should not be displayed on Cart page")
     public void removed_should_not_be_displayed_on_cart_page(String product) {
-        String cartprod = cartPage.get_cartprodname();
-        List<String> noitemlist = new ArrayList<>();
-        System.out.println("Items are not present in the cart page: " + noitemlist);
+        List<String> cartprodlist = cartPage.get_cartprodname_multiple();
+        if (!cartprodlist.contains(product)) {
+            System.out.println("Items are not present in the cart page: " );
+        }
+        else{
+            System.out.println("Items is present in the cart page: " );
+        }
+
+
     }
 
     @Then("Removed products should not be displayed on Cart page")

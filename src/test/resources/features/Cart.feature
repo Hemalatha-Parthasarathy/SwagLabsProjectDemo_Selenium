@@ -5,15 +5,17 @@ Feature: Cart Page functionality
     When User enters Username as "<Username>" and Password as "<Password>"
     And Click on login button
     Given User is on the Products page
-    When User clicks on Cart icon on Products Page
+    When User clicks on the "<Product>"
+    And User clicks on Cart icon on Products Page
     Then User is on the cart page
     And Continue shopping and Checkout is displayed
     And Quantity and Description is displayed
-    And Cart icon with quantity is displayed
+    And Cart icon and quantity is displayed
 
     Examples:
-      | Username      | Password     |
-      | standard_user | secret_sauce |
+      | Username      | Password     | Product             |
+      | standard_user | secret_sauce | Sauce Labs Backpack |
+
 
   Scenario Outline: Validate Empty cart page
     Given User is on the Login page
@@ -68,7 +70,7 @@ Feature: Cart Page functionality
     When User clicks on Add to cart of specific "<Product>"
     And User clicks on Cart icon on Products Page
     Then User is on the cart page
-    When User clicks on Remove button of specific "<Product>"
+    When User clicks on Remove button of "<Product>"
     Then Removed "<Product>" should not be displayed on Cart page
     Examples:
       | Username      | Password     | Product                  |

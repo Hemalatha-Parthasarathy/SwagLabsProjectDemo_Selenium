@@ -78,7 +78,7 @@ Feature: Product Selection functionality
     Given User is on the Products page
     When User clicks on the "<Product>"
     Then Selected specific "<Product>" page is displayed
-    When User click on Add to cart in specific product page
+    When User clicks on Add to cart in specific product page
     When  Click on Back to Products Page
     Then Verify the "<Product>" is selected on the Products Page
 

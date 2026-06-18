@@ -20,6 +20,7 @@ public class ProductsPage {
     By pageHeader = By.xpath("//span[@class='title']");
     By Slt_sortDrpdown = By.xpath("//select[@class='product_sort_container']");
     By Lst_productsLsts = By.xpath("//div[@class='inventory_item']");
+    By prodName = By.xpath(".//div[contains(@class,'inventory_item_name')]");
     By Lst_prdNames = By.xpath("//div[@class='inventory_item_name ']");
     By Lst_prdPrices = By.xpath("//div[@class='inventory_item_price']");
     By Lst_btnAddToCarts = By.xpath("//button[@class='btn btn_primary btn_small btn_inventory ']");
@@ -168,10 +169,20 @@ public class ProductsPage {
 
     public List<String> get_removeProducts() {
         List<String> addedlist = new ArrayList<>();
-        List<WebElement> addeditemstocart = driver.findElements(Lst_btnRemoveCard);
-        for (WebElement elet : addeditemstocart) {
-            addedlist.add(elet.getText());
+
+        List<WebElement> prodlist = driver.findElements(Lst_productsLsts);
+        System.out.println("Total Items: "+prodlist.size());
+
+        for (WebElement elet : prodlist) {
+            String button = elet.findElement(Lst_btnRemoveCard).getText();
+            String name = elet.findElement(prodName).getText();
+
+            System.out.println("button : "+button);
+            System.out.println("name : "+name);
+            if (button.equals("Remove")){
+                addedlist.add(name);
         }
+    }
         return addedlist;
     }
 

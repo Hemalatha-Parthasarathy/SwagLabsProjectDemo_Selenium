@@ -7,7 +7,7 @@ import org.junit.Test;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = {"src/test/resources/features/Products.feature"},
+        features = {"src/test/resources/features"},
         glue = {"stepDefinitions","appHooks"},
         dryRun = false,
         monochrome = true,

@@ -8,6 +8,8 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.System.*;
+
 public class CartPage {
 
     private WebDriver driver;
@@ -21,13 +23,14 @@ public class CartPage {
     By btncheckout = By.id("checkout");
     By lblquantity = By.xpath("//div[@class='cart_quantity_label']");
     By lbldecription = By.xpath("//div[@class='cart_desc_label']");
+    By prodList = By.xpath("//div[@class='cart_item']");
     By pagetitle = By.xpath("//span[@class='title']");
     By iconCart = By.xpath("//a[@class='shopping_cart_link']");
-    By itemcount = By.xpath("//span[@class='shopping_cart_badge']");
-    By cart_prdname = By.xpath("//div[@class='inventory_item_name']");
+    By itemcount = By.xpath(".//span[@class='shopping_cart_badge']");
+    By cart_prdname = By.xpath(".//div[@class='inventory_item_name']");
     By cart_price = By.xpath("//div[@class='inventory_item_price']");
     By cart_qty = By.xpath("//div[@class='cart_quantity']");
-    By Lst_cartremove = By.xpath("//button[@class='btn btn_secondary btn_small cart_button']");
+    By Lst_cartremove = By.xpath(".//button[@class='btn btn_secondary btn_small cart_button']");
 
 
     public String validatePagetitle() {
@@ -47,7 +50,7 @@ public class CartPage {
         if (driver.findElement(btncheckout).isDisplayed()) {
             txtcheckout = driver.findElement(btncheckout).getText();
         } else {
-            System.out.println("checkout button is not displayed");
+            out.println("checkout button is not displayed");
         }
         return txtcheckout;
     }
@@ -57,7 +60,7 @@ public class CartPage {
         if (driver.findElement(btncontinueShop).isDisplayed()) {
             txtcontinueshop = driver.findElement(btncontinueShop).getText();
         } else {
-            System.out.println("continueshop button is not displayed");
+            out.println("continueshop button is not displayed");
         }
         return txtcontinueshop;
     }
@@ -67,7 +70,7 @@ public class CartPage {
         if (driver.findElement(lblquantity).isDisplayed()) {
             txtquantity = driver.findElement(lblquantity).getText();
         } else {
-            System.out.println("Quantity header is not displayed");
+            out.println("Quantity header is not displayed");
         }
         return txtquantity;
     }
@@ -77,18 +80,37 @@ public class CartPage {
         if (driver.findElement(lbldecription).isDisplayed()) {
             txtdescription = driver.findElement(lbldecription).getText();
         } else {
-            System.out.println("Description header is not displayed");
+            out.println("Description header is not displayed");
         }
         return txtdescription;
     }
 
-    public String display_iconitemcount() {
+    public boolean cartItemCountNotpresent(){
+        return driver.findElements(itemcount).isEmpty();
+    }
+
+    public void display_cartItemCount() {
+       List<WebElement> cartItemCount = driver.findElements(itemcount);
+
+        if (cartItemCount.isEmpty()) {
+            System.out.println("Cart is Empty");
+        } else {
+           String count = cartItemCount.get(0).getText();
+        }
+    }
+
+    public void display_iconCart() {
+        driver.findElement(iconCart).isDisplayed();
+    }
+
+
+    public String get_iconitemcount() {
         driver.findElement(iconCart).isDisplayed();
         String count = null;
         if (driver.findElement(itemcount).isDisplayed()) {
             count = driver.findElement(itemcount).getText();
         } else {
-            System.out.println("cart icon with count is not displayed");
+            out.println("cart icon with count is not displayed");
         }
         return count;
     }
@@ -107,11 +129,21 @@ public class CartPage {
         return cartprodname;
     }
 
-    public void clk_cartRemove(String product) {
-        By cartremove = By.xpath("//div[text()='" +
-                product + "']/ancestor::div[@class='inventory_item_description']//button[contains(text(),'Remove')]");
-        driver.findElement(cartremove).click();
+    public void clk_txtcontinueshop() {
+        driver.findElement(btncontinueShop).click();
+    }
 
+    public void clk_cartRemove(String product) {
+        List<WebElement> itemsList= driver.findElements(prodList);
+
+        for (WebElement e : itemsList){
+            String cartprodname = e.findElement(cart_prdname).getText();
+            String button = e.findElement(Lst_cartremove).getText();
+
+            if(cartprodname.equals(product)){
+                e.findElement(Lst_cartremove).click();
+            }
+        }
     }
 
     public void clk_removemultiple(List<String> products) {

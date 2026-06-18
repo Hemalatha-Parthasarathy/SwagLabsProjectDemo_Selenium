@@ -16,12 +16,12 @@ Features:
 
 Technology Stack:
 Java - Programming Language
-Selenium WebDriver - 
-Cucumber - 
-Maven - 
-Junit - 
+Selenium WebDriver - Browser automation tool
+Cucumber - framework used to write test scenarios in Gherkin syntax
+Maven - Build Automation Tool
+Junit - Test execution framework
 
-Pre requisite:
+Prerequisite:
 Java JDK
 Maven
 IDE (IntelliJ IDEA)
